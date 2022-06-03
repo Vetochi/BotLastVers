@@ -31,7 +31,9 @@ def get_text_messages(bot, cur_user, message):
         bot.send_photo(chat_id, photo=album["img"], caption=f'{album["name"]} - {album["artist"]}')
 
     elif ms_text == "Курсы валют":
-        exchange_command(chat_id)
+        data, data2 = dollar()
+        bot.send_message(chat_id, text=data)
+        bot.send_message(chat_id, text=data2)
 
     # elif ms_text == "Прислать курсы":
     #     bot.send_message(chat_id, text=get_cur())
@@ -95,7 +97,7 @@ def get_foxURL():
 # -----------------------------------------------------------------------
 def get_dogURL():
     url = ""
-    req = requests.get('https://random.dog/woof.json').json()
+    req = requests.get('https://random.dog/woof.json')
     if req.status_code == 200:
         r_json = req.json()
         url = r_json['url']
@@ -185,4 +187,8 @@ def get_cover():
     return {"artist": result_find_artist.text, "name": result_find_name.text, "img": result_find[0]['src']}
 
 #------------------------------------------------------------------------------------------ Курсы валют
+def dollar():
+    data = requests.get('https://free.currconv.com/api/v7/convert?apiKey=ea94edf0f52cbeb0c689&q=USD_RUB&compact=ultra').json()
+    data2 = requests.get('https://free.currconv.com/api/v7/convert?apiKey=ea94edf0f52cbeb0c689&q=EUR_RUB&compact=ultra').json()
+    return data['USD_RUB'], data2['EUR_RUB']
 
